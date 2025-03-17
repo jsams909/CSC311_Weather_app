@@ -23,10 +23,10 @@ record WeatherData(String date, double temp, double humidity, double precipitati
     }
 
     /**
-     * Extracts the month part from the date string
-     * @return The month in format YYYY-MM
+     * Extracts the day part from the date string
+     * @return The day in format YYYY-MM
      */
-    String getMonth() {
+    String getday() {
         return date.substring(0, 7);
     }
 }
@@ -61,15 +61,15 @@ public class CSC311_Weather_app {
     }
 
     /**
-     * Calculates the average temperature for a specific month
+     * Calculates the average temperature for a specific day
      *
      * @param data List of weather data
-     * @param month Month in format YYYY-MM
+     * @param day day in format YYYY-MM
      * @return Average temperature or NaN if no data
      */
-    static double getMonthlyAverageTemperature(List<WeatherData> data, String month) {
+    static double getdaylyAverageTemperature(List<WeatherData> data, String day) {
         return data.stream()
-                .filter(d -> d.getMonth().equals(month))
+                .filter(d -> d.getday().equals(day))
                 .mapToDouble(WeatherData::temp)
                 .average()
                 .orElse(Double.NaN);
@@ -144,17 +144,17 @@ public class CSC311_Weather_app {
             return "No weather data available.";
         }
 
-        // Find min and max temperatures
+        /** min and max temperatures */
         var tempStats = data.stream()
                 .mapToDouble(WeatherData::temp)
                 .summaryStatistics();
 
-        // Get category counts
+
         var categoryCountsStr = getTemperatureCategoryCounts(data).entrySet().stream()
                 .map(e -> e.getKey() + ": " + e.getValue() + " days")
                 .collect(Collectors.joining("\n  ", "  ", ""));
 
-        // Use text block for nice formatting
+        /**Use text block for nice formatting*/
         return """
                Weather Data Summary
                ===================
@@ -177,7 +177,7 @@ public class CSC311_Weather_app {
     }
 
     public static void main(String[] args) {
-        // Load data using the new loadData method
+        /** Taking in weather data*/
         List<WeatherData> weatherData = loadData("src/weather_data.csv");
 
         if (weatherData.isEmpty()) {
@@ -185,14 +185,14 @@ public class CSC311_Weather_app {
             return;
         }
 
-        // Generate and display summary
+
         System.out.println(generateSummary(weatherData));
 
-        // Additional analysis examples
+
         System.out.println("\nAdditional Analysis:");
         System.out.println("-------------------");
 
-        // Get hot days (above 86°F)
+        /**Get hot days (above 86°F)*/
         var hotDays = getDaysAboveTemperature(weatherData, 86.0);
         System.out.println("Days above 86°F: " + hotDays.size());
         if (!hotDays.isEmpty()) {
@@ -200,15 +200,6 @@ public class CSC311_Weather_app {
                     hotDays.stream().limit(5).collect(Collectors.joining(", ")));
         }
 
-        // Calculate monthly averages for the first few months in the data
-        weatherData.stream()
-                .map(WeatherData::getMonth)
-                .distinct()
-                .sorted()
-                .limit(3) // Just show first 3 months
-                .forEach(month -> {
-                    double avgTemp = getMonthlyAverageTemperature(weatherData, month);
-                    System.out.printf("Average temperature for %s: %.1f°F\n", month, avgTemp);
-                });
+
     }
 }
