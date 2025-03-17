@@ -192,12 +192,12 @@ public class CSC311_Weather_app {
         System.out.println("\nAdditional Analysis:");
         System.out.println("-------------------");
 
-        /**Get hot days (above 86°F)*/
-        var hotDays = getDaysAboveTemperature(weatherData, 86.0);
-        System.out.println("Days above 86°F: " + hotDays.size());
-        if (!hotDays.isEmpty()) {
-            System.out.println("First 5 hot days: " +
-                    hotDays.stream().limit(5).collect(Collectors.joining(", ")));
+        /**Get days above average*/
+        var aboveAvgDays = getDaysAboveTemperature(weatherData, 29.0);
+        System.out.println("Days above 29°F: " + aboveAvgDays.size());
+        if (!aboveAvgDays.isEmpty()) {
+            System.out.println("First 5 above average days: " +
+                    aboveAvgDays.stream().limit(5).collect(Collectors.joining(", ")));
         }
 
 
